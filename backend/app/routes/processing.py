@@ -1,7 +1,7 @@
 from fastapi import APIRouter, UploadFile, File, HTTPException, Form
 from fastapi.responses import JSONResponse
 from app.utils.file_utils import create_directories, save_json, delete_folder, get_next_id
-from app.models.models import whisper_model
+from app.models.models import whisper_transcribe
 from app.utils.vectordb import create_vector_db
 from app.utils.similarity_search import perform_similarity_search
 from app.services.pdfs_processing import get_text_from_pdfs
@@ -79,7 +79,7 @@ async def processing(
         # descriptions = await get_image_descriptions(screenshots_path, id)
 
         # Transcribe audio
-        transcription = whisper_model.transcribe(audio_path)
+        transcription = whisper_transcribe(audio_path)
         pdfs = get_text_from_pdfs(pdfs_dir)
         # Save results
         result = {
@@ -90,7 +90,7 @@ async def processing(
             "dateTime": dateTime,
             "topic": topic,
             "otherinfo": otherInfo,
-            "transcription": transcription["text"],
+            "transcription": transcription,
             "pdfs": pdfs,
         }
         result_path = os.path.join(data_dir, id, "result.json")

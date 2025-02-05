@@ -1,10 +1,10 @@
 # import os
 # import torch
-import whisper
+# import whisper
 # from torchvision import models, transforms
 
 # Load Whisper model
-whisper_model = whisper.load_model("turbo")
+# whisper_model = whisper.load_model("turbo")
 
 # # Load the trained classification model
 # device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
@@ -23,3 +23,22 @@ whisper_model = whisper.load_model("turbo")
 #     transforms.ToTensor(),
 #     transforms.Normalize([0.485, 0.456, 0.406], [0.229, 0.224, 0.225])
 # ])
+
+import gorq
+async def whisper_transcribe(filename: str):
+    # Initialize the Groq client
+    client = Groq()
+
+    # Open the audio file
+    with open(filename, "rb") as file:
+        # Create a transcription of the audio file
+        transcription = client.audio.transcriptions.create(
+            file=(filename, file.read()),  # Required audio file
+            model="whisper-large-v3-turbo",  # Required model to use for transcription
+            prompt="Specify context or spelling",  # Optional
+            response_format="json",  # Optional
+            language="en",  # Optional
+            temperature=0.0  # Optional
+        )
+        # Return the transcription text
+        return transcription.text

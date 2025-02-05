@@ -1,0 +1,17 @@
+fastapi
+uvicorn
+
+python-dotenv
+pydantic
+
+
+aiohttp
+python-multipart
+
+
+langchain-openai
+langchain-chroma
+langchain
+langchain-community
+openai
+groq
